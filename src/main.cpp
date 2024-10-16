@@ -1,19 +1,23 @@
 #include <Arduino.h>
 #include <TFT_eSPI.h>
-
 #include <TAMC_GT911.h>
-
 #include "touch.h"
 #include "ui\ui.h"
+#include <lvgl.h>
 
 #define SCREEN_WIDTH 240
 #define SCREEN_HEIGHT 320
+#define LED_PIN 17
+
+
+
+
 
 TFT_eSPI tft = TFT_eSPI(SCREEN_WIDTH, SCREEN_HEIGHT); /* TFT instance */
+TAMC_GT911 tp = TAMC_GT911(TOUCH_SDA, TOUCH_SCL, TOUCH_INT, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);
 
-TAMC_GT911 tp = TAMC_GT911(TOUCH_GT911_SDA, TOUCH_GT911_SCL, TOUCH_GT911_INT, TOUCH_GT911_RST, max(TOUCH_MAP_X1, TOUCH_MAP_X2), max(TOUCH_MAP_Y1, TOUCH_MAP_Y2));
-
-
+extern lv_event_t g_eez_event;
+extern bool g_eez_event_is_available;
 
 // Touchscreen coordinates: (x, y) and pressure (z)
 int x, y, z;
@@ -27,6 +31,10 @@ void log_print(lv_log_level_t level, const char * buf) {
   Serial.println(buf);
   Serial.flush();
 }
+
+
+
+
 
 // Get the Touchscreen data
 void touchscreen_read(lv_indev_t * indev, lv_indev_data_t * data) {
@@ -63,14 +71,21 @@ void setup() {
   String LVGL_Arduino = String("LVGL Library Version: ") + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
   Serial.begin(115200);
   Serial.println(LVGL_Arduino);
+
+tft.begin();
+  tft.setRotation(3);
+
   
   // Start LVGL
   lv_init();
+
+   lv_tick_set_cb((lv_tick_get_cb_t)millis);
   // Register print function for debugging
   lv_log_register_print_cb(log_print);
 
+  Wire.begin(TOUCH_SDA, TOUCH_SCL);
   tp.begin();
-  tp.setRotation(ROTATION_LEFT);
+  tp.setRotation(TOUCH_ROTATION);
 
   // Create a display object
   lv_display_t * disp;
@@ -85,6 +100,9 @@ void setup() {
   lv_indev_set_read_cb(indev, touchscreen_read);
 
   ui_init();
+
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
 }
 
 void loop() {
@@ -102,5 +120,32 @@ void loop() {
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(5);     // tell LVGL how much time has passed
-  delay(5);           // let this time pass
+  delay(5);
+
+  if (g_eez_event_is_available)
+  {
+    lv_obj_t *obj = lv_event_get_target_obj(&g_eez_event);
+    Serial.printf("Recieved event from object %u\n", obj);
+    g_eez_event_is_available = false;
+
+    if (obj == objects.screen1_btn)
+    {
+      lv_scr_load(objects.screen1);
+    }
+
+    else if (obj == objects.back_btn)
+    {
+      lv_scr_load(objects.main);
+    }
+
+    else if (obj == objects.led_btn)
+    {
+      static boolean led_status = LOW;
+      led_status = !led_status;
+      Serial.println("LED toggled");
+      digitalWrite(LED_PIN, led_status);
+
+    }
+  }
+
 }
