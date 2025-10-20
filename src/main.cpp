@@ -4,10 +4,14 @@
 #include "touch.h"
 #include "ui\ui.h"
 #include <lvgl.h>
+#include "sim_utils.h"
 
 #define SCREEN_WIDTH 240
 #define SCREEN_HEIGHT 320
 #define LED_PIN 17
+
+#define EHSI_PIVOT_X 120
+#define EHSI_PIVOT_Y 120
 
 
 
@@ -72,8 +76,8 @@ void setup() {
   Serial.begin(115200);
   Serial.println(LVGL_Arduino);
 
-tft.begin();
-  tft.setRotation(3);
+  tft.begin();
+  //tft.setRotation(TFT_SCREEN_ROTATION);
 
   
   // Start LVGL
@@ -83,7 +87,7 @@ tft.begin();
   // Register print function for debugging
   lv_log_register_print_cb(log_print);
 
-  Wire.begin(TOUCH_SDA, TOUCH_SCL);
+  /*Wire.begin(TOUCH_SDA, TOUCH_SCL);*/
   tp.begin();
   tp.setRotation(TOUCH_ROTATION);
 
@@ -91,7 +95,7 @@ tft.begin();
   lv_display_t * disp;
   // Initialize the TFT display using the TFT_eSPI library
   disp = lv_tft_espi_create(SCREEN_WIDTH, SCREEN_HEIGHT, draw_buf, sizeof(draw_buf));
-  lv_display_set_rotation(disp, LV_DISPLAY_ROTATION_270);
+  lv_display_set_rotation(disp, LV_DISPLAY_ROTATION_180);
     
   // Initialize an LVGL input device object (Touchscreen)
   lv_indev_t * indev = lv_indev_create();
@@ -103,11 +107,13 @@ tft.begin();
 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
+
+  lv_image_set_pivot(objects.compass_rose, EHSI_PIVOT_X, EHSI_PIVOT_Y);
 }
 
 void loop() {
         
-        tp.read();
+       /* tp.read();
   if (tp.isTouched){
     for (int i=0; i<tp.touches; i++){
       Serial.print("Touch ");Serial.print(i+1);Serial.print(": ");;
@@ -116,7 +122,13 @@ void loop() {
       Serial.print("  size: ");Serial.println(tp.points[i].size);
       Serial.println(' ');
     }
-  }
+  }*/
+
+  readJsonFromSerial();
+  Serial.println("Heading: " + String(simData.hdg) + "  Altitude: " + String(simData.alt) + "  VS: " + String(simData.vs) + "  IAS: " + String(simData.ias));
+
+  Serial.println("Rotating compass rose to " + String(simData.hdg) + " degrees");
+  lv_image_set_rotation(objects.compass_rose, simData.hdg * 10); // LVGL uses 0.1 degree units
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(5);     // tell LVGL how much time has passed
@@ -127,25 +139,6 @@ void loop() {
     lv_obj_t *obj = lv_event_get_target_obj(&g_eez_event);
     Serial.printf("Recieved event from object %u\n", obj);
     g_eez_event_is_available = false;
-
-    if (obj == objects.screen1_btn)
-    {
-      lv_scr_load(objects.screen1);
-    }
-
-    else if (obj == objects.back_btn)
-    {
-      lv_scr_load(objects.main);
-    }
-
-    else if (obj == objects.led_btn)
-    {
-      static boolean led_status = LOW;
-      led_status = !led_status;
-      Serial.println("LED toggled");
-      digitalWrite(LED_PIN, led_status);
-
-    }
+  
   }
-
 }

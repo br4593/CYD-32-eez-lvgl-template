@@ -1,5 +1,5 @@
 #include "images.h"
 
 const ext_img_desc_t images[1] = {
-    { "compass_rose", &img_compass_rose },
+    0
 };
