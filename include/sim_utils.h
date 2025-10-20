@@ -6,6 +6,7 @@ struct SimData {
     float vs;      // vertical speed (ft/min)
     float alt;     // altitude (feet)
     float ias;   // indicated airspeed (knots)
+    int hdg_bug; // heading bug (degrees)
 
 };
 

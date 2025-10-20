@@ -10,8 +10,16 @@
 #define SCREEN_HEIGHT 320
 #define LED_PIN 17
 
-#define EHSI_PIVOT_X 120
-#define EHSI_PIVOT_Y 120
+static const int EHSI_PIVOT_X = 115;
+static const int EHSI_PIVOT_Y = 115;
+
+lv_coord_t compass_rose_w;
+lv_coord_t compass_rose_h;
+
+lv_coord_t hdg_bug_w;
+lv_coord_t hdg_bug_h;
+
+
 
 
 
@@ -108,7 +116,14 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
 
-  lv_image_set_pivot(objects.compass_rose, EHSI_PIVOT_X, EHSI_PIVOT_Y);
+  compass_rose_w = lv_obj_get_width(objects.compass_rose);
+  compass_rose_h = lv_obj_get_height(objects.compass_rose);
+
+  lv_image_set_pivot(objects.compass_rose, compass_rose_w / 2, compass_rose_h / 2);
+
+  hdg_bug_w = lv_obj_get_width(objects.hdg_bug);
+  hdg_bug_h = lv_obj_get_height(objects.hdg_bug);
+  lv_image_set_pivot(objects.hdg_bug, hdg_bug_w / 2, hdg_bug_h / 2);
 }
 
 void loop() {
@@ -125,10 +140,15 @@ void loop() {
   }*/
 
   readJsonFromSerial();
-  Serial.println("Heading: " + String(simData.hdg) + "  Altitude: " + String(simData.alt) + "  VS: " + String(simData.vs) + "  IAS: " + String(simData.ias));
+  //Serial.println("Heading: " + String(simData.hdg) + "  Altitude: " + String(simData.alt) + "  VS: " + String(simData.vs) + "  IAS: " + String(simData.ias));
 
-  Serial.println("Rotating compass rose to " + String(simData.hdg) + " degrees");
-  lv_image_set_rotation(objects.compass_rose, simData.hdg * 10); // LVGL uses 0.1 degree units
+  //Serial.println("Rotating compass rose to " + String(simData.hdg) + " degrees");
+  lv_image_set_rotation(objects.compass_rose, simData.hdg * -10); // LVGL uses 0.1 degree units
+  lv_label_set_text_fmt(objects.hdg_debug, "HDG: %.1f", simData.hdg);
+  lv_label_set_text_fmt(objects.hdg_drum_label, "%d", (int)simData.hdg);
+
+  lv_image_set_rotation(objects.hdg_bug, simData.hdg_bug * 10); // LVGL uses 0.1 degree units
+  lv_label_set_text_fmt(objects.selected_heading_label, "%d", simData.hdg_bug);
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(5);     // tell LVGL how much time has passed

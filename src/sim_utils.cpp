@@ -14,6 +14,7 @@ void readJsonFromSerial()
             simData.vs  = doc["vs"];
             simData.alt = doc["alt"];
             simData.hdg = doc["hdg"];
+            simData.hdg_bug = doc["hdg_bug"];
             // Now use these values to update your LVGL indicators
         }
     }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="31.75mm"
+   height="11.039961mm"
+   viewBox="0 0 31.75 11.039961"
+   version="1.1"
+   id="svg1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient1"
+       inkscape:swatch="gradient">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop2" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3" />
+    </linearGradient>
+    <linearGradient
+       id="swatch1"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#aa76b6;stop-opacity:0;"
+         offset="0"
+         id="stop1" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;stroke:#00ffff;stroke-width:0.684941;stroke-dasharray:none;stroke-opacity:0.98632"
+       id="rect1"
+       width="31.06506"
+       height="10.35502"
+       x="0.34247026"
+       y="0.34247193" />
+    <path
+       style="display:inline;fill:#00ffff;stroke-width:0.00805596"
+       d="m 1.9892998,8.7675824 c 0.0092,0.0377 0.01357,0.0416 0.05744,0.05101 0.02831,0.0061 0.514823,0.0087 1.6065129,0.0087 h 1.565908 l 0.02877,-0.02713 c 0.0511,-0.04819 0.05119,-0.04805 -0.162295,-0.257069 -0.262233,-0.25675 -1.416905,-1.400595 -2.3049299,-2.28332 l -0.735771,-0.731392 1.0499519,-1.047661 c 0.577472,-0.576201 1.304618,-1.3001796 1.615879,-1.6088315 0.424372,-0.4208059 0.565929,-0.5658363 0.565929,-0.5798115 0,-0.010266 -0.01127,-0.0323 -0.02503,-0.049001 l -0.02503,-0.030366 -1.596224,0.00238 c -0.8798829,0.00132 -1.6026519,0.00548 -1.6105479,0.00934 -0.0079,0.00384 -0.01876,0.014711 -0.02418,0.024183 -0.0077,0.013441 -0.01013,0.720837 -0.01114,3.2556597 -7.93e-4,1.781165 0.0013,3.249674 0.0047,3.263353 z"
+       id="path8" />
+  </g>
+</svg>

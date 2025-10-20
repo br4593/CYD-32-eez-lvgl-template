@@ -9,7 +9,15 @@ extern "C" {
 
 typedef struct _objects_t {
     lv_obj_t *ehsi;
+    lv_obj_t *obj0;
     lv_obj_t *compass_rose;
+    lv_obj_t *hdg_drum;
+    lv_obj_t *hdg_drum_label;
+    lv_obj_t *overlay;
+    lv_obj_t *hdg_debug;
+    lv_obj_t *selected_heading;
+    lv_obj_t *selected_heading_label;
+    lv_obj_t *hdg_bug;
 } objects_t;
 
 extern objects_t objects;
