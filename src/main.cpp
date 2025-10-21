@@ -4,23 +4,10 @@
 #include "touch.h"
 #include "ui\ui.h"
 #include <lvgl.h>
-#include "sim_utils.h"
 
 #define SCREEN_WIDTH 240
 #define SCREEN_HEIGHT 320
 #define LED_PIN 17
-
-static const int EHSI_PIVOT_X = 115;
-static const int EHSI_PIVOT_Y = 115;
-
-lv_coord_t compass_rose_w;
-lv_coord_t compass_rose_h;
-
-lv_coord_t hdg_bug_w;
-lv_coord_t hdg_bug_h;
-
-
-
 
 
 
@@ -85,7 +72,7 @@ void setup() {
   Serial.println(LVGL_Arduino);
 
   tft.begin();
-  //tft.setRotation(TFT_SCREEN_ROTATION);
+  
 
   
   // Start LVGL
@@ -116,19 +103,11 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
 
-  compass_rose_w = lv_obj_get_width(objects.compass_rose);
-  compass_rose_h = lv_obj_get_height(objects.compass_rose);
-
-  lv_image_set_pivot(objects.compass_rose, compass_rose_w / 2, compass_rose_h / 2);
-
-  hdg_bug_w = lv_obj_get_width(objects.hdg_bug);
-  hdg_bug_h = lv_obj_get_height(objects.hdg_bug);
-  lv_image_set_pivot(objects.hdg_bug, hdg_bug_w / 2, hdg_bug_h / 2);
 }
 
 void loop() {
         
-       /* tp.read();
+        tp.read();
   if (tp.isTouched){
     for (int i=0; i<tp.touches; i++){
       Serial.print("Touch ");Serial.print(i+1);Serial.print(": ");;
@@ -137,18 +116,9 @@ void loop() {
       Serial.print("  size: ");Serial.println(tp.points[i].size);
       Serial.println(' ');
     }
-  }*/
+  }
 
-  readJsonFromSerial();
-  //Serial.println("Heading: " + String(simData.hdg) + "  Altitude: " + String(simData.alt) + "  VS: " + String(simData.vs) + "  IAS: " + String(simData.ias));
 
-  //Serial.println("Rotating compass rose to " + String(simData.hdg) + " degrees");
-  lv_image_set_rotation(objects.compass_rose, simData.hdg * -10); // LVGL uses 0.1 degree units
-  lv_label_set_text_fmt(objects.hdg_debug, "HDG: %.1f", simData.hdg);
-  lv_label_set_text_fmt(objects.hdg_drum_label, "%d", (int)simData.hdg);
-
-  lv_image_set_rotation(objects.hdg_bug, simData.hdg_bug * 10); // LVGL uses 0.1 degree units
-  lv_label_set_text_fmt(objects.selected_heading_label, "%d", simData.hdg_bug);
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(5);     // tell LVGL how much time has passed
